@@ -8,6 +8,7 @@ class Tabuleiro:
         if pai:
             self.tabuleiro = pai.tabuleiro[:]
         elif dificuldade != 0:
+            z = -1
             self.tabuleiro = self.starter
             i = 0
             if dificuldade == 1:
@@ -19,16 +20,17 @@ class Tabuleiro:
             while i > 0:
                 i-=1
                 a = random.randint(0,3)
-                if a == 0 and self.findDot()[0] != 2:
+                if z != 1 and a == 0 and self.findDot()[0] != 2:
                     self.direita()
-                elif a == 1 and self.findDot()[0] != 0:
+                elif z != 0  and a == 1 and self.findDot()[0] != 0:
                     self.esquerda()
-                elif a == 2 and self.findDot()[1] != 0:
+                elif z != 3 and a == 2 and self.findDot()[1] != 0:
                     self.cima()
-                elif a == 3 and self.findDot()[1] != 2:
+                elif z != 2 and a == 3 and self.findDot()[1] != 2:
                     self.baixo()
                 else: 
                     i+=1
+                z = a
         self.Distancia()
     
     def __eq__(self, value):
