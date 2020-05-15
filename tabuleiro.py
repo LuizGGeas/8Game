@@ -36,8 +36,11 @@ class Tabuleiro:
     def __eq__(self, value):
         return self.distancia.__eq__(value.distancia)
 
+    def comparte(self, x2):
+        return self.tabuleiro == x2.tabuleiro
+
     def direita(self):
-        i, j = self.findDot()[0], self.findDot()[1]
+        i, j = self.findDot()
         if not j == 2:
             novo = Tabuleiro(pai = self)
             aux = novo.tabuleiro[i][j+1]
@@ -48,7 +51,7 @@ class Tabuleiro:
             return None
         
     def esquerda(self):
-        i, j = self.findDot()[0], self.findDot()[1]
+        i, j = self.findDot()
         if not i == 0:
             novo = Tabuleiro(pai = self)
             aux = self.tabuleiro[i][j-1]
@@ -59,7 +62,7 @@ class Tabuleiro:
             return None
 
     def cima(self):
-        i, j = self.findDot()[0], self.findDot()[1]
+        i, j = self.findDot()
         if i == 0:
             novo = Tabuleiro(pai = self)
             aux = self.tabuleiro[i-1][j]
@@ -70,7 +73,7 @@ class Tabuleiro:
             return None
 
     def baixo(self):
-        i, j = self.findDot()[0], self.findDot()[1]
+        i, j = self.findDot()
         if not i == 2:
             novo = Tabuleiro(pai = self)
             aux = self.tabuleiro[i+1][j]
@@ -102,5 +105,4 @@ class Tabuleiro:
         for i in self.tabuleiro:
             print(i)
 
-    def sorter(self):
-        return self.distancia
+    

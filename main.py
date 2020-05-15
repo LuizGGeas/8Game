@@ -15,16 +15,28 @@ class rodar:
         self.abertos.append(inicial)
         b = self.contem()
         while b:
+            d = [False, False, False, False]
             x = min(self.abertos)
             a = self.abertos.remove(x)
-            if a.direita() != None and a.direita not in self.abertos:
+            for i in self.abertos:
+                if i.tabuleiro == a.direita.tabuleiro:
+                    d[0] = True
+                if i.tabuleiro == a.esquerda.tabuleiro:
+                    d[1] = True
+                if i.tabuleiro == a.cima.tabuleiro:
+                    d[2] = True
+                if i.tabuleiro == a.baixo.tabuleiro:
+                    d[3] = True
+
+            if a.direita() != None and d[0]:
                 self.abertos.append(a.direita)
-            if a.esquerda() != None  and a.esquerda not in self.abertos:
+            if a.esquerda() != None  and d[1]:
                 self.abertos.append(a.esquerda)
-            if a.cima() != None and a.cima not in self.abertos:
+            if a.cima() != None and d[2]:
                 self.abertos.append(a.cima)
-            if a.baixo() != None and a.baixo() not in self.abertos:
+            if a.baixo() != None and d[3]:
                 self.abertos.append(a.baixo())
+            b = self.contem()
         else:
             print('final alcançado')
             while(a != None):
