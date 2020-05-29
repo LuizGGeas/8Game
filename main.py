@@ -6,33 +6,29 @@ class rodar:
 	abertos = []
 	fechados = []
 
-	def contem(self):
-		for i in self.abertos:
-			if i.final():
-				return i
-		return False
-
 	def starter(self, inicial):
 		self.abertos.append(inicial)
-		b = self.contem()
-		while b == False:
+		b = inicial
+		while b.distancia > 0:
+			print('{} caminhos por verificar'.format(len(self.abertos)))
+			print('{} caminhos verificados até o momento'.format(len(self.fechados)))
 			print('tamanho do vetor: '.format(len(self.abertos)))
-			x = self.min()
-			self.abertos.remove(x)
-			novos = x.movimentos()
-			novos = [x for x in novos if not self.alreadyIn(x)]
+			b = self.min()
+			self.fechados.append(self.abertos.remove(b))
+			novos = b.movimentos() if b.distancia > 0 else []
+			novos = [x for x in novos if not x in self.abertos]
 			self.abertos.append(novos)
-			b = self.contem()
 		else:
 			print('final alcançado')
-			b.printar()
-			while(b.pai != None):
-				b.printar()
-				print(b.distancia)
-				b = b.pai
+			for i in self.abertos:
+				if i.final():
+					b = i
+					break
 
-	def alreadyIn(self, value):
-		return value in self.abertos
+			while(b != None):
+				b.printar()
+				print("{} caminhos foram verificados".format(len(self.fechados)))
+				b = b.pai
 
 	def min(self):
 		x = self.abertos[0]
@@ -42,6 +38,6 @@ class rodar:
 		return x
 
 
-a = tab(dificuldade=3, tipo=2)
+a = tab(dificuldade=3, heuristica=2)
 a.printar()
 rodar().starter(a)
