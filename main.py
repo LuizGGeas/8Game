@@ -1,49 +1,47 @@
-# coding= UTF-8
+# -*- coding: utf-8 -*-
 from tabuleiro import Tabuleiro as tab
-from operator import attrgetter
+
 
 class rodar:
-    abertos = []
-    fechados = []
-    def contem(self):
-        for i in self.abertos:
-            if i.tabuleiro == i.starter:
-                return i
-        return False
+	abertos = []
+	fechados = []
 
-    def starter(self, inicial):
-        self.abertos.append(inicial)
-        b = self.contem()
-        while b:
-            d = [False, False, False, False]
-            x = min(self.abertos)
-            a = self.abertos.remove(x)
-            for i in self.abertos:
-                if i.tabuleiro == a.direita.tabuleiro:
-                    d[0] = True
-                if i.tabuleiro == a.esquerda.tabuleiro:
-                    d[1] = True
-                if i.tabuleiro == a.cima.tabuleiro:
-                    d[2] = True
-                if i.tabuleiro == a.baixo.tabuleiro:
-                    d[3] = True
+	def contem(self):
+		for i in self.abertos:
+			if i.final():
+				return i
+		return False
 
-            if a.direita() != None and d[0]:
-                self.abertos.append(a.direita)
-            if a.esquerda() != None  and d[1]:
-                self.abertos.append(a.esquerda)
-            if a.cima() != None and d[2]:
-                self.abertos.append(a.cima)
-            if a.baixo() != None and d[3]:
-                self.abertos.append(a.baixo())
-            b = self.contem()
-        else:
-            print('final alcançado')
-            while(a != None):
-                a.printar()
-                a = a.pai
+	def starter(self, inicial):
+		self.abertos.append(inicial)
+		b = self.contem()
+		while b == False:
+			print('tamanho do vetor: '.format(len(self.abertos)))
+			x = self.min()
+			self.abertos.remove(x)
+			novos = x.movimentos()
+			novos = [x for x in novos if not self.alreadyIn(x)]
+			self.abertos.append(novos)
+			b = self.contem()
+		else:
+			print('final alcançado')
+			b.printar()
+			while(b.pai != None):
+				b.printar()
+				print(b.distancia)
+				b = b.pai
+
+	def alreadyIn(self, value):
+		return value in self.abertos
+
+	def min(self):
+		x = self.abertos[0]
+		for i in self.abertos:
+			if i.distancia < x.distancia:
+				x = i
+		return x
 
 
-a = tab(dificuldade= 2)
-
+a = tab(dificuldade=3, tipo=2)
+a.printar()
 rodar().starter(a)
