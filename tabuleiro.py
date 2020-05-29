@@ -125,7 +125,7 @@ class Tabuleiro:
 	def baixo(self, i, j):
 		print('baixou ponto')
 		if not i == 2:
-			novo = Tabuleiro(pai=self)
+			novo = Tabuleiro(pai=self, tipo=self.tipo)
 			aux = self.tabuleiro[i+1][j]
 			self.tabuleiro[i+1][j] = self.tabuleiro[i][j]
 			self.tabuleiro[i][j] = aux
