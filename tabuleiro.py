@@ -1,4 +1,5 @@
 import random
+from copy import copy, deepcopy
 
 
 class Tabuleiro:
@@ -12,53 +13,52 @@ class Tabuleiro:
         self.pai = pai
         self.heuristica = heuristica
         if pai:
-            self.tabuleiro = pai.tabuleiro[:]
+            self.tabuleiro = deepcopy(pai.tabuleiro)
         elif dificuldade != 0:
-			self.aleatorizar(dificuldade)
+            self.aleatorizar(dificuldade)
         if heuristica == 1:
             print('tentou1')
             self.Distancia_Manhattan()
         else:
             print('tentou2')
             self.Fora_Lugar()
-        print('chega de aleatorizar')
 
     def aleatorizar(self, dificuldade):
         print('aleatorizando')
         z = -1
-        self.tabuleiro = self.meta
+        self.tabuleiro = deepcopy(self.meta)
         i = 0
         round = 100
         if dificuldade == 1:
-			i = 20
+            i = 20
         elif dificuldade == 2:
-        	i = 50
+            i = 50
         elif dificuldade == 3:
-        	i = 100
+            i = 100
         while i > 0 and self.tabuleiro == self.meta and round > 0:
             round -= 1
             i -= 1
             a = random.randint(1, 4)
             i, j = self.findDot()
             if abs(z-a) == 1 or z == a:
-            	i += 1
+                i += 1
             elif a == 1 and self.findDot()[0] != 2:
-            	print('direita')
+                print('direita')
                 self.direita(i, j)
                 z = a
             elif a == 2 and self.findDot()[0] != 0:
-            	print('esquerda')
+                print('esquerda')
                 self.esquerda(i, j)
                 z = a
             elif a == 3 and self.findDot()[1] != 0:
-            	print('cima')
+                print('cima')
                 self.cima(i, j)
                 z = a
             elif a == 4 and self.findDot()[1] != 2:
-            	print('baixo')
+                print('baixo')
                 self.baixo(i, j)
                 z = a
-
+        print('chega de aleatorizar')
 
     def movimentos(self):
         print('vendo movimentos')
@@ -149,20 +149,22 @@ class Tabuleiro:
         print("vendo distancia")
         for i in range(3):
             for j in range(3):
-                if self.starter[i][j] != self.tabuleiro[i][j]:
+                if self.meta[i][j] != self.tabuleiro[i][j]:
                     k = 0
                     l = 0
                     for k in range(3):
                         for l in range(3):
-                            if self.tabuleiro[i][j] == self.starter[k][l]:
+                            if self.tabuleiro[i][j] == self.meta[k][l]:
                                 break
-                    self.distancia += abs((i-k)) + abs((j-l))
+                    self.distancia = self.distancia + abs((i-k)) + abs((j-l))
 
     def Fora_Lugar(self):
+        print('fora do lugar')
         for i in range(3):
             for j in range(3):
                 if(self.meta[i][j] != self.tabuleiro[i][j]):
-                    self.distancia += 1
+                    print('entrou')
+                    self.distancia = self.distancia+1
 
     def printar(self):
         for i in self.tabuleiro:
@@ -175,3 +177,6 @@ class Tabuleiro:
                 if self.tabuleiro[i][j] != self.meta[i][j]:
                     return False
         return True
+
+    def getDistancia(self):
+        return self.distancia
